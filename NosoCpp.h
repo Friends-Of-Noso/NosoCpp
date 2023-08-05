@@ -9,11 +9,11 @@
 
 class NosoCpp {
 private:
-	static mCripto cripto;
+	 mCripto cripto;
 
 
 public:
-	static WalletObject* ImportWalletQR(std::string& keys);
+	 WalletObject* ImportWalletQR(std::string& keys);
 
 
 	NosoCpp() = default;
