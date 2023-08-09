@@ -5,7 +5,7 @@
 
 mCripto cripto;
 
-WalletObject* ImportWalletQR(std::string& keys) {
+WalletObject* NosoCpp::ImportWalletQR(std::string& keys) {
 	std::vector<std::string> tokens;
 	std::string delimiter = " ";
 	size_t pos = 0;
@@ -31,11 +31,11 @@ WalletObject* ImportWalletQR(std::string& keys) {
 			walletObject = new WalletObject();
 			walletObject->PublicKey = publicKey;
 			walletObject->PrivateKey = privateKey;
-			//  walletObject->Hash = mCripto::GetAddressFromPublicKey(publicKey);
-			return walletObject;
+			walletObject->Hash = cripto.getAddressFromPublicKey(publicKey);
+			//return walletObject;
 		}
 
-		if (walletObject != nullptr) {
+		if (walletObject != NULL) {
 			std::cout << "  #Wallet Object:" << std::endl;
 			std::cout << "  #Hash: " << walletObject->Hash << std::endl;
 			std::cout << "  #Public Key: " << walletObject->PublicKey << std::endl;
@@ -44,6 +44,9 @@ WalletObject* ImportWalletQR(std::string& keys) {
 		else {
 			std::cout << "  #Error -> Invalid input keys." << std::endl;
 		}
+
+
+		
 	}
 
 	return nullptr;

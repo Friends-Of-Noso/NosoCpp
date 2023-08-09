@@ -5,6 +5,7 @@
 #include <string>
 #include "Objects.h"
 #include <cryptopp/eccrypto.h>
+#include <cryptopp/asn.h>
 #include <cryptopp/ecp.h>
 #include <cryptopp/osrng.h>
 #include <cryptopp/oids.h>
@@ -20,7 +21,7 @@ public:
 		const std::vector<unsigned char>& privateKey, NosoC::KeyType keyType);
 
 	bool verifySignature(const std::vector<unsigned char>& signature, const std::vector<unsigned char>& message,
-		const std::vector<unsigned char>& privateKey, NosoC::KeyType keyType);
+		const std::vector<unsigned char>& publicKey, NosoC::KeyType keyType);
 };
 
 

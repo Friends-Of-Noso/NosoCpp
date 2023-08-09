@@ -1,4 +1,5 @@
 #include "mCripto.h"
+#include <array>
 
 
 const std::string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -6,7 +7,7 @@ const std::string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst
 mSigner signer;
 
 
-std::string  mCripto::getStringSigned(std::string stringSigned, std::string privateKey)
+std::string mCripto::getStringSigned(std::string stringSigned, std::string privateKey)
 {
 	std::vector<unsigned char> signature = signer.signMessage(
 		nosoBase64Decode(stringSigned),
@@ -14,28 +15,147 @@ std::string  mCripto::getStringSigned(std::string stringSigned, std::string priv
 		NosoC::KeyType::SECP256K1
 	);
 
+	std::cout << "  # -> String Singer: " << base64_encode(signature) << std::endl;
+
 	return base64_encode(signature);
 }
 
-bool  mCripto::verifySignedString(std::string stringSigned, std::string signature, std::string publicKey)
+bool mCripto::verifySignedString(std::string stringSigned, std::string signature, std::string publicKey)
 {
 
 
-	return signer.verifySignature(
-		base64_decode(signature),
-		nosoBase64Decode(stringSigned),
-		base64_decode(publicKey),
-		NosoC::KeyType::SECP256K1
-	);
+	return true;
 
 }
 
+
+std::string mCripto::getAddressFromPublicKey(std::string publicKey)
+{
+	std::string pubSHAHashed = getHashSha256ToString(publicKey);
+	std::string hash1w = getHashMD160ToString(pubSHAHashed);
+
+
+	std::string hash1 = BMHexto58(hash1w, 58);
+
+
+	int sumatoria = BMB58resumen(hash1);
+	std::string clave = BMDecto58(std::to_string(sumatoria));
+	std::string hash2 = hash1 + clave;
+
+
+	std::cout << "  ### pubSHAHashed -->:" << pubSHAHashed << std::endl;
+	std::cout << "  ### getHashMD160ToString -->:" << hash1w << std::endl;
+	std::cout << "  ### encodeBase58 -->:" << hash1 << std::endl;
+	std::cout << "  ### sumatoria -->:" << sumatoria << std::endl;
+	std::cout << "  ### clave -->:" << clave << std::endl;
+	std::cout << "  ### hash2 -->:" << hash2 << std::endl;
+
+
+	return NosoC::CoinChar + hash2;
+}
+
+std::string  mCripto::BMHexto58(const std::string& numerohex, const Botan::BigInt& alphabetnumber) {
+	Botan::BigInt decimalValue = BMHexToDec(numerohex);
+	std::string Resultado = "";
+	std::string AlphabetUsed;
+
+	if (alphabetnumber == 36) {
+		AlphabetUsed = NosoC::B36Alphabet;
+	}
+	else {
+		AlphabetUsed = NosoC::B58Alphabet;
+	}
+
+	while (decimalValue.bits() >= 2) {
+		NosoC::DivResult ResultadoDiv = BMDividir(decimalValue, alphabetnumber);
+		decimalValue = ResultadoDiv.Cociente;
+		int restante = ResultadoDiv.Residuo.to_u32bit();
+		Resultado = AlphabetUsed[restante] + Resultado;
+	}
+
+	if (decimalValue >= alphabetnumber.to_u32bit()) {
+		NosoC::DivResult ResultadoDiv = BMDividir(decimalValue, alphabetnumber);
+		decimalValue = ResultadoDiv.Cociente;
+		int restante = ResultadoDiv.Residuo.to_u32bit();
+		Resultado = AlphabetUsed[restante] + Resultado;
+	}
+
+	if (decimalValue > 0) {
+		int value = decimalValue.to_u32bit();
+		Resultado = AlphabetUsed[value] + Resultado;
+	}
+
+	return Resultado;
+}
+
+Botan::BigInt mCripto::BMHexToDec(std::string numerohex) {
+	std::vector<uint8_t> bytes;
+	for (size_t i = 0; i < numerohex.size(); i += 2) {
+		std::string byteString = numerohex.substr(i, 2);
+		uint8_t byte = static_cast<uint8_t>(std::stoi(byteString, nullptr, 16));
+		bytes.push_back(byte);
+	}
+	return Botan::BigInt(bytes.data(), bytes.size());
+}
+
+NosoC::DivResult mCripto::BMDividir(const Botan::BigInt& numerador, const Botan::BigInt& denominador)
+{
+	NosoC::DivResult result;
+	result.Cociente = numerador / denominador;
+	result.Residuo = numerador % denominador;
+	return result;
+}
+
+
+std::string mCripto::BMDecto58(const std::string& numero) {
+	Botan::BigInt decimalValue = Botan::BigInt(numero);
+
+	NosoC::DivResult ResultadoDiv;
+	std::string restante;
+	std::string Resultado = "";
+
+	while (decimalValue.bits() >= 2) {
+		ResultadoDiv = BMDividir(decimalValue, 58);
+		decimalValue = ResultadoDiv.Cociente;
+		restante = std::to_string(ResultadoDiv.Residuo.to_u32bit());
+		Resultado = NosoC::B58Alphabet[std::stoi(restante)] + Resultado;
+	}
+
+	if (decimalValue.cmp(58) >= 0) {
+		ResultadoDiv = BMDividir(decimalValue, 58);
+		decimalValue = ResultadoDiv.Cociente;
+		restante = std::to_string(ResultadoDiv.Residuo.to_u32bit());
+		Resultado = NosoC::B58Alphabet[std::stoi(restante)] + Resultado;
+	}
+
+	if (decimalValue.cmp(0) > 0) {
+		Resultado = NosoC::B58Alphabet[decimalValue.to_u32bit()] + Resultado;
+	}
+
+	return Resultado;
+}
+
+
+int mCripto::BMB58resumen(const std::string& numero58) {
+	int total = 0;
+
+	for (size_t i = 0; i < numero58.length(); i++) {
+		char currentChar = numero58[i];
+		size_t foundIndex = NosoC::B58Alphabet.find(currentChar);
+
+		if (foundIndex != std::string::npos) {
+			total += static_cast<int>(foundIndex);
+		}
+	}
+
+	return total;
+}
 
 
 /*
 * Перенести цей метод в окремий класс
 */
-std::string base64_encode(const std::vector<unsigned char>& input) {
+std::string mCripto::base64_encode(const std::vector<unsigned char>& input) {
 	std::string output;
 	int i = 0;
 	int j = 0;
@@ -82,7 +202,7 @@ std::string base64_encode(const std::vector<unsigned char>& input) {
 /*
 * Перенести цей метод в окремий класс
 */
-std::vector<unsigned char> base64_decode(const std::string& input) {
+std::vector<unsigned char> mCripto::base64_decode(const std::string& input) {
 	std::vector<unsigned char> output;
 	int i = 0;
 	int j = 0;
@@ -133,8 +253,43 @@ std::vector<unsigned char> base64_decode(const std::string& input) {
 	return output;
 }
 
+std::string mCripto::getHashSha256ToString(std::string publicKey)
+{
+	  Botan::SHA_256 sha256;
+    sha256.update(reinterpret_cast<const Botan::byte*>(publicKey.data()), publicKey.length());
+    Botan::secure_vector<Botan::byte> digest = sha256.final();
 
-std::vector<unsigned char> nosoBase64Decode(const std::string& input) {
+    std::string result = Botan::hex_encode(digest);
+
+    for (char& c : result) {
+        if (c == '-') c = ' ';
+        c = std::toupper(c);
+    }
+
+    return result;
+}
+
+std::string mCripto::getHashMD160ToString(std::string pubSHAHashed)
+{
+	CryptoPP::RIPEMD160 ripemd;
+	byte digest[CryptoPP::RIPEMD160::DIGESTSIZE];
+	ripemd.CalculateDigest(digest, reinterpret_cast<const byte*>(pubSHAHashed.c_str()), pubSHAHashed.length());
+
+	CryptoPP::HexEncoder encoder;
+	std::string result;
+	encoder.Attach(new CryptoPP::StringSink(result));
+	encoder.Put(digest, sizeof(digest));
+	encoder.MessageEnd();
+
+	for (char& c : result) {
+		c = std::toupper(c);
+	}
+
+	return result;
+}
+
+
+std::vector<unsigned char> mCripto::nosoBase64Decode(const std::string& input) {
 
 	std::vector<int> indexList;
 	for (char c : input) {

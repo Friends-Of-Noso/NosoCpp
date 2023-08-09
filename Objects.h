@@ -1,6 +1,7 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 #include <string>
+#include <botan/bigint.h>
 
 namespace NosoC {
 
@@ -25,8 +26,8 @@ namespace NosoC {
 
     class DivResult {
     public:
-        std::string Cociente;
-        std::string Residuo;
+        Botan::BigInt Cociente;
+        Botan::BigInt Residuo;
     };
 
 } // namespace NosoC_::models
