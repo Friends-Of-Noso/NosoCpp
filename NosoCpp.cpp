@@ -1,11 +1,15 @@
 #include "NosoCpp.h"
 
-
-
-
 mCripto cripto;
 
-WalletObject* NosoCpp::ImportWalletQR(std::string& keys) {
+
+WalletObject* NosoCpp::CreateNewAddress() {
+
+
+	return nullptr;
+}
+
+WalletObject* NosoCpp::ImportWalletForKeys(std::string& keys) {
 	std::vector<std::string> tokens;
 	std::string delimiter = " ";
 	size_t pos = 0;
@@ -46,7 +50,7 @@ WalletObject* NosoCpp::ImportWalletQR(std::string& keys) {
 		}
 
 
-		
+
 	}
 
 	return nullptr;

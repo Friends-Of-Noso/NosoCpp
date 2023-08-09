@@ -13,7 +13,8 @@ private:
 
 
 public:
-	 WalletObject* ImportWalletQR(std::string& keys);
+	 WalletObject* ImportWalletForKeys(std::string& keys);
+	 WalletObject* CreateNewAddress();
 
 
 	NosoCpp() = default;

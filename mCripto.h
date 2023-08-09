@@ -17,9 +17,6 @@ class mCripto {
 private:
 	mSigner signer;
 	std::vector<unsigned char> nosoBase64Decode(const std::string& input);
-	std::string base64_encode(const std::vector<unsigned char>& input);
-	std::vector<unsigned char> base64_decode(const std::string& input);
-
 	std::string getHashSha256ToString(std::string publicKey);
 	std::string getHashMD160ToString(std::string pubSHAHashed);
 

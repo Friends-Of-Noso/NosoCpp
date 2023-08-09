@@ -2,6 +2,7 @@
 
 
 
+
 std::vector<unsigned char>  mSigner::signMessage(const std::vector<unsigned char>& message,
     const std::vector<unsigned char>& privateKey, NosoC::KeyType keyType)
 {

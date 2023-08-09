@@ -13,6 +13,16 @@
 #include <cryptopp/hex.h>
 
 
+
+#include <botan/botan.h>
+#include <botan/ecdsa.h>
+#include <botan/auto_rng.h>
+#include <botan/pkcs8.h>
+#include <botan/data_src.h>
+#include <botan/oids.h>
+#include <botan/base64.h>
+
+
 using namespace CryptoPP;
 
 class mSigner {
@@ -22,6 +32,9 @@ public:
 
 	bool verifySignature(const std::vector<unsigned char>& signature, const std::vector<unsigned char>& message,
 		const std::vector<unsigned char>& publicKey, NosoC::KeyType keyType);
+
+
+	
 };
 
 
