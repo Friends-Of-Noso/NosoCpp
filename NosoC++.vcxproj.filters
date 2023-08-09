@@ -21,7 +21,13 @@
     <ClInclude Include="NosoCpp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mCripto.h">
+    <ClInclude Include="nCripto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,16 +38,19 @@
     <ClCompile Include="WalletObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mCripto.cpp">
+    <ClCompile Include="nCripto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Objects.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="mSigner.h">
+    <ClCompile Include="nSigner.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="mSigner.cpp">
+    <ClCompile Include="nSigner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

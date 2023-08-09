@@ -1,10 +1,11 @@
-#ifndef MCRIPTO_H
-#define MCRIPTO_H
+#ifndef NCRIPTO_H
+#define NCRIPTO_H
 #include <string>
 #include <vector>
 #include <bitset>
 #include "Objects.h"
-#include "mSigner.h"
+#include "nSigner.h"
+#include "Constants.h"
 #include <cryptopp/ripemd.h>
 #include <botan/bigint.h>
 #include <botan/base58.h>
@@ -13,9 +14,9 @@
 #include <botan/hex.h>
 
 
-class mCripto {
+class nCripto {
 private:
-	mSigner signer;
+	nSigner signer;
 	std::vector<unsigned char> nosoBase64Decode(const std::string& input);
 	std::string getHashSha256ToString(std::string publicKey);
 	std::string getHashMD160ToString(std::string pubSHAHashed);
@@ -27,10 +28,13 @@ private:
 	NosoC::DivResult BMDividir(const Botan::BigInt& numerador, const Botan::BigInt& denominador);
 	std::string BMHexto58(const std::string& numerohex, const Botan::BigInt& alphabetnumber);
 
+
 public:
 	std::string getStringSigned(std::string stringSigned, std::string privateKey);
 	bool verifySignedString(std::string stringSigned, std::string signature, std::string publicKey);
 	std::string getAddressFromPublicKey(std::string publicKey);
+
+	NosoC::KeyPair generateECKeysPair();
 };
 
 #endif // MCRIPTO_H

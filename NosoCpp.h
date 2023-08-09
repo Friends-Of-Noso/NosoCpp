@@ -1,7 +1,8 @@
 #ifndef NOSOC_H
 #define NOSOC_H
 
-#include "mCripto.h"
+#include "nCripto.h"
+#include "nUtils.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,7 +10,8 @@
 
 class NosoCpp {
 private:
-	 mCripto cripto;
+	nCripto cripto;
+	 nUtils utils;
 
 
 public:

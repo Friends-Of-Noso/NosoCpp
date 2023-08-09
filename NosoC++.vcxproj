@@ -150,15 +150,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="mCripto.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="nCripto.h" />
     <ClInclude Include="NosoCpp.h" />
+    <ClInclude Include="nUtils.h" />
     <ClInclude Include="WalletObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="mCripto.cpp" />
-    <ClCompile Include="mSigner.cpp" />
-    <ClCompile Include="mSigner.h" />
+    <ClCompile Include="nCripto.cpp" />
+    <ClCompile Include="nSigner.cpp" />
+    <ClCompile Include="nSigner.h" />
     <ClCompile Include="NosoCpp.cpp" />
+    <ClCompile Include="nUtils.cpp" />
     <ClCompile Include="Objects.h">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

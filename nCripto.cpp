@@ -1,8 +1,8 @@
-#include "mCripto.h"
-mSigner signer;
+#include "nCripto.h"
+nSigner signer;
 
 
-std::string mCripto::getStringSigned(std::string stringSigned, std::string privateKey)
+std::string nCripto::getStringSigned(std::string stringSigned, std::string privateKey)
 {
 
 	Botan::secure_vector<uint8_t> decodedBytes = Botan::base64_decode(stringSigned);
@@ -20,7 +20,7 @@ std::string mCripto::getStringSigned(std::string stringSigned, std::string priva
 
 }
 
-bool mCripto::verifySignedString(std::string stringSigned, std::string signature, std::string publicKey)
+bool nCripto::verifySignedString(std::string stringSigned, std::string signature, std::string publicKey)
 {
 
 
@@ -29,7 +29,7 @@ bool mCripto::verifySignedString(std::string stringSigned, std::string signature
 }
 
 
-std::string mCripto::getAddressFromPublicKey(std::string publicKey)
+std::string nCripto::getAddressFromPublicKey(std::string publicKey)
 {
 	std::string pubSHAHashed = getHashSha256ToString(publicKey);
 	std::string hash1w = getHashMD160ToString(pubSHAHashed);
@@ -54,7 +54,7 @@ std::string mCripto::getAddressFromPublicKey(std::string publicKey)
 	return NosoC::CoinChar + hash2;
 }
 
-std::string  mCripto::BMHexto58(const std::string& numerohex, const Botan::BigInt& alphabetnumber) {
+std::string  nCripto::BMHexto58(const std::string& numerohex, const Botan::BigInt& alphabetnumber) {
 	Botan::BigInt decimalValue = BMHexToDec(numerohex);
 	std::string Resultado = "";
 	std::string AlphabetUsed;
@@ -88,7 +88,12 @@ std::string  mCripto::BMHexto58(const std::string& numerohex, const Botan::BigIn
 	return Resultado;
 }
 
-Botan::BigInt mCripto::BMHexToDec(std::string numerohex) {
+NosoC::KeyPair nCripto::generateECKeysPair()
+{
+	return signer.generateECKeyPair();
+}
+
+Botan::BigInt nCripto::BMHexToDec(std::string numerohex) {
 	std::vector<uint8_t> bytes;
 	for (size_t i = 0; i < numerohex.size(); i += 2) {
 		std::string byteString = numerohex.substr(i, 2);
@@ -98,7 +103,7 @@ Botan::BigInt mCripto::BMHexToDec(std::string numerohex) {
 	return Botan::BigInt(bytes.data(), bytes.size());
 }
 
-NosoC::DivResult mCripto::BMDividir(const Botan::BigInt& numerador, const Botan::BigInt& denominador)
+NosoC::DivResult nCripto::BMDividir(const Botan::BigInt& numerador, const Botan::BigInt& denominador)
 {
 	NosoC::DivResult result;
 	result.Cociente = numerador / denominador;
@@ -107,7 +112,7 @@ NosoC::DivResult mCripto::BMDividir(const Botan::BigInt& numerador, const Botan:
 }
 
 
-std::string mCripto::BMDecto58(const std::string& numero) {
+std::string nCripto::BMDecto58(const std::string& numero) {
 	Botan::BigInt decimalValue = Botan::BigInt(numero);
 
 	NosoC::DivResult ResultadoDiv;
@@ -136,7 +141,7 @@ std::string mCripto::BMDecto58(const std::string& numero) {
 }
 
 
-int mCripto::BMB58resumen(const std::string& numero58) {
+int nCripto::BMB58resumen(const std::string& numero58) {
 	int total = 0;
 
 	for (size_t i = 0; i < numero58.length(); i++) {
@@ -151,7 +156,7 @@ int mCripto::BMB58resumen(const std::string& numero58) {
 	return total;
 }
 
-std::string mCripto::getHashSha256ToString(std::string publicKey)
+std::string nCripto::getHashSha256ToString(std::string publicKey)
 {
 	Botan::SHA_256 sha256;
 	sha256.update(reinterpret_cast<const Botan::byte*>(publicKey.data()), publicKey.length());
@@ -167,7 +172,7 @@ std::string mCripto::getHashSha256ToString(std::string publicKey)
 	return result;
 }
 
-std::string mCripto::getHashMD160ToString(std::string pubSHAHashed)
+std::string nCripto::getHashMD160ToString(std::string pubSHAHashed)
 {
 	CryptoPP::RIPEMD160 ripemd;
 	byte digest[CryptoPP::RIPEMD160::DIGESTSIZE];
@@ -187,7 +192,7 @@ std::string mCripto::getHashMD160ToString(std::string pubSHAHashed)
 }
 
 
-std::vector<unsigned char> mCripto::nosoBase64Decode(const std::string& input) {
+std::vector<unsigned char> nCripto::nosoBase64Decode(const std::string& input) {
 
 	std::vector<int> indexList;
 	for (char c : input) {

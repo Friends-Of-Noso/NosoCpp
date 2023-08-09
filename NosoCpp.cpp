@@ -1,56 +1,46 @@
 #include "NosoCpp.h"
 
-mCripto cripto;
-
+nCripto cripto;
+nUtils utils;
 
 WalletObject* NosoCpp::CreateNewAddress() {
+	NosoC::KeyPair KeysPair = cripto.generateECKeysPair();
 
+	WalletObject* walletObject = new WalletObject();
 
+	walletObject->PublicKey = KeysPair.PublicKey;
+	walletObject->PrivateKey = KeysPair.PrivateKey;
+	walletObject->Hash = cripto.getAddressFromPublicKey(KeysPair.PublicKey);
+
+	std::cout << "  #Create Wallet Wallet Object:" << std::endl;
+	std::cout << "  #PublicKey: " << walletObject->PublicKey << std::endl;
+	std::cout << "  #PrivateKey: " << walletObject->PrivateKey << std::endl;
+	std::cout << "  #Hash: " << walletObject->Hash << std::endl;
 	return nullptr;
 }
 
 WalletObject* NosoCpp::ImportWalletForKeys(std::string& keys) {
-	std::vector<std::string> tokens;
-	std::string delimiter = " ";
-	size_t pos = 0;
-	WalletObject* walletObject = NULL;
 
-	std::cout << "### Start Test \n" << std::endl;
-	while ((pos = keys.find(delimiter)) != std::string::npos) {
-		std::string token = keys.substr(0, pos);
-		tokens.push_back(token);
-		keys.erase(0, pos + delimiter.length());
+
+	NosoC::KeyPair keysPair = utils.StringTokenizer(keys);
+	std::string signature = cripto.getStringSigned(NosoC::StringSignature, keysPair.PrivateKey);
+	bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
+
+	if (verification) {
+		WalletObject* walletObject = new WalletObject();
+		walletObject->PublicKey = keysPair.PublicKey;
+		walletObject->PrivateKey = keysPair.PrivateKey;
+		walletObject->Hash = cripto.getAddressFromPublicKey(keysPair.PublicKey);
+
+		std::cout << "  #Wallet Object:" << std::endl;
+		std::cout << "  #Hash: " << walletObject->Hash << std::endl;
+		std::cout << "  #Public Key: " << walletObject->PublicKey << std::endl;
+		std::cout << "  #Private Key: " << walletObject->PrivateKey << std::endl;
+		return walletObject;
 	}
-	tokens.push_back(keys);
-
-	if (tokens.size() == 2) {
-		std::string publicKey = tokens[0];
-		std::string privateKey = tokens[1];
-
-
-		std::string signature = cripto.getStringSigned(NosoC::StringSignature, privateKey);
-		bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, publicKey);
-
-		if (verification) {
-			walletObject = new WalletObject();
-			walletObject->PublicKey = publicKey;
-			walletObject->PrivateKey = privateKey;
-			walletObject->Hash = cripto.getAddressFromPublicKey(publicKey);
-			//return walletObject;
-		}
-
-		if (walletObject != NULL) {
-			std::cout << "  #Wallet Object:" << std::endl;
-			std::cout << "  #Hash: " << walletObject->Hash << std::endl;
-			std::cout << "  #Public Key: " << walletObject->PublicKey << std::endl;
-			std::cout << "  #Private Key: " << walletObject->PrivateKey << std::endl;
-		}
-		else {
-			std::cout << "  #Error -> Invalid input keys." << std::endl;
-		}
-
-
-
+	else
+	{
+		std::cout << "  #Error -> Invalid input keys." << std::endl;
 	}
 
 	return nullptr;
