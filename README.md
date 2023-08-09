@@ -1,15 +1,11 @@
 # NosoC++
-NosoC++ is a cryptographic library in C++ that provides various cryptographic functionalities such as encryption, decryption, hashing, and digital signatures.
+NosoC++ is a C++ cryptographic library that provides various cryptographic functions to work with the Noso coin.
 
 # Getting Started
-
 #### Prerequisites
-
 C++ Compiler (e.g., g++, Visual Studio)
 
-
 # Usage
-
 ### Include the necessary headers in your C++ code:
 ```
 #include <NosoCpp.h>
