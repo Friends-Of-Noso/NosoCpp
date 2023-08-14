@@ -5,24 +5,35 @@ nSigner signer;
 std::string nCripto::getStringSigned(std::string stringSigned, std::string privateKey)
 {
 
-	Botan::secure_vector<uint8_t> decodedBytes = Botan::base64_decode(stringSigned);
-	std::vector<unsigned char> decodedVector(decodedBytes.begin(), decodedBytes.end());
-	std::vector<unsigned char> signature = signer.signMessage(
-		nosoBase64Decode(stringSigned),
-		decodedVector,
-		NosoC::KeyType::SECP256K1
+/*	ECDSA<ECP, SHA1>::PrivateKey ecPrivateKey;
+	Integer privateKeyInteger(reinterpret_cast<const byte*>(privateKey.data()), privateKey.size());
+	ecPrivateKey.Initialize(ASN1::secp256k1(), privateKeyInteger);
+	return signer.signMessage(
+		stringSigned,
+		ecPrivateKey
 	);
-
-	std::cout << "  # -> String Singer: " << Botan::base64_encode(reinterpret_cast<const uint8_t*>(signature.data()),
+	*/
+	/*std::cout << "  # -> String Singer: " << Botan::base64_encode(reinterpret_cast<const uint8_t*>(signature.data()),
 		signature.size()) << std::endl;
 
-	return Botan::base64_encode(reinterpret_cast<const uint8_t*>(signature.data()), signature.size());
-
+	return Botan::base64_encode(reinterpret_cast<const uint8_t*>(signature.data()), signature.size());*/
+	return "";
 }
 
 bool nCripto::verifySignedString(std::string stringSigned, std::string signature, std::string publicKey)
 {
 
+
+/*ECDSA<ECP, SHA1>::PublicKey ecPublicKey;
+	Integer privateKeyInteger(reinterpret_cast<const byte*>(publicKey.data()), publicKey.size());
+	ecPublicKey.Initialize(ASN1::secp256k1(), privateKeyInteger);
+
+
+	return signer.verifySignature(
+		stringSigned,
+		signature,
+		ecPublicKey
+	);*/	
 
 	return true;
 
