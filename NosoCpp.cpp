@@ -1,5 +1,4 @@
 #include "NosoCpp.h"
-
 nCripto cripto;
 nUtils utils;
 
@@ -23,10 +22,9 @@ WalletObject* NosoCpp::ImportWalletForKeys(std::string& keys) {
 
 
 	NosoC::KeyPair keysPair = utils.StringTokenizer(keys);
-	std::string signature = cripto.getStringSigned(NosoC::StringSignature, keysPair.PrivateKey);
-	bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
+	bool verification = cripto.verifySignedString(NosoC::StringSignature, keysPair.PublicKey);
 
-	if (verification) {
+	if (verification && utils.checkSizesKeyPair(keysPair)) {
 		WalletObject* walletObject = new WalletObject();
 		walletObject->PublicKey = keysPair.PublicKey;
 		walletObject->PrivateKey = keysPair.PrivateKey;

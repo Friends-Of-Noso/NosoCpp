@@ -44,12 +44,6 @@
     <ClCompile Include="Objects.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="nSigner.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nSigner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="nUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

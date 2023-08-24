@@ -14,10 +14,20 @@ NosoC::KeyPair nUtils::StringTokenizer(std::string keys)
 	tokens.push_back(keys);
 
 	if (tokens.size() == 2) {
-		return {tokens[0],tokens[1]};
+		return { tokens[0],tokens[1] };
 	}
 	else {
 		return NosoC::KeyPair();
 	}
 
+}
+
+bool nUtils::checkSizesKeyPair(NosoC::KeyPair keys)
+{
+
+	if (keys.PrivateKey.length() == 44 && keys.PublicKey.length() == 88) {
+		return true;
+	}
+
+	return false;
 }

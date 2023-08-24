@@ -4,7 +4,6 @@
 #include "nCripto.h"
 #include "nUtils.h"
 #include <iostream>
-#include <string>
 #include <vector>
 #include "WalletObject.h"
 

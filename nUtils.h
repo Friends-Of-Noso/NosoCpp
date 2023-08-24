@@ -14,6 +14,8 @@ private:
 
 public:
 	NosoC::KeyPair StringTokenizer(std::string keys);
+
+	bool checkSizesKeyPair(NosoC::KeyPair keys);
 };
 
 #endif
