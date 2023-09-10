@@ -18,11 +18,6 @@ nUtils utils;
 	}
 
 
-	std::string NosoCpp::testKey()
-	{
-		return "CreateTest";
-	}
-
 	WalletObject* NosoCpp::ImportWalletForKeys(std::string& keys) {
 
 		NosoC::KeyPair keysPair = utils.StringTokenizer(keys);
