@@ -152,12 +152,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="nCore.h" />
     <ClInclude Include="nCripto.h" />
     <ClInclude Include="NosoCpp.h" />
     <ClInclude Include="nUtils.h" />
     <ClInclude Include="WalletObject.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="nCore.cpp" />
     <ClCompile Include="nCripto.cpp" />
     <ClCompile Include="NosoCpp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>

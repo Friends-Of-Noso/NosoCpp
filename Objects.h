@@ -22,8 +22,8 @@ namespace NosoC {
 
 	class DivResult {
 	public:
-		Botan::BigInt Cociente;
-		Botan::BigInt Residuo;
+		Botan::BigInt Quotient;
+		Botan::BigInt Remainder;
 	};
 
 }
