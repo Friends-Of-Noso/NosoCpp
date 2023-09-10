@@ -8,7 +8,7 @@
  */
 #include "nUtils.h"
 
-NosoC::KeyPair nUtils::StringTokenizer(std::string keys)
+NosoC::KeyPair NosoCppUtils::StringTokenizer(std::string keys)
 {
 	std::vector<std::string> tokens;
 	std::string delimiter = " ";
@@ -30,7 +30,13 @@ NosoC::KeyPair nUtils::StringTokenizer(std::string keys)
 
 }
 
-bool nUtils::checkSizesKeyPair(NosoC::KeyPair keys)
+
+/*
+* Checks the key sizes in a pair
+* Returns true if the dimensions match the expected values
+* Otherwise, it returns false
+*/
+bool NosoCppUtils::checkSizesKeyPair(NosoC::KeyPair keys)
 {
 
 	if (keys.PrivateKey.length() == 44 && keys.PublicKey.length() == 88) {

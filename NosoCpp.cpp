@@ -8,7 +8,6 @@
  */
 #include "NosoCpp.h"
 nCripto cripto;
-nUtils utils;
 WalletObject* NosoCpp::CreateNewAddress() {
 	NosoC::KeyPair KeysPair = cripto.generateECKeysPair();
 
@@ -52,15 +51,15 @@ bool NosoCpp::verifySignatureMessage(const std::string& message, const std::stri
 }
 
 
-WalletObject* NosoCpp::ImportWalletForKeys(std::string& keys) {
+WalletObject* NosoCpp::ImportAddressForKeys(const std::string& keys) {
 
-	NosoC::KeyPair keysPair = utils.StringTokenizer(keys);
+	NosoC::KeyPair keysPair = NosoCppUtils::StringTokenizer(keys);
 	std::string signature = cripto.signMessage(NosoC::StringSignature, keysPair.PrivateKey);
 	bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
 
 
 
-	if (!utils.checkSizesKeyPair(keysPair)) {
+	if (!NosoCppUtils::checkSizesKeyPair(keysPair)) {
 		std::cout << "  #Error -> Invalid input keys, " << std::endl;
 		return nullptr;
 	}
