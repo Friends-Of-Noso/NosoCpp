@@ -26,7 +26,6 @@ WalletObject* wallet = noso.CreateNewAddress();
 
 | Library   | URL                             |
 | --------- | ------------------------------- |
-| Crypto++  | [https://www.cryptopp.com/](https://www.cryptopp.com/) |
 | Botan     | [https://botan.randombit.net/](https://botan.randombit.net/) |
 
 
