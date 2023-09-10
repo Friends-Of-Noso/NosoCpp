@@ -1,3 +1,11 @@
+/*
+ * This code is licensed under the terms of the MIT License.
+ *
+ * Author: pasichDev
+ * Repository: https://github.com/pasichDev/NosoCpp
+ *
+ * See LICENSE file for details.
+ */
 #include "nUtils.h"
 
 NosoC::KeyPair nUtils::StringTokenizer(std::string keys)
