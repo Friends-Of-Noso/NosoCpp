@@ -3,21 +3,22 @@
 
 #include <vector>
 #include <bitset>
+#include <iostream>
+
 #include "Objects.h"
 #include "Constants.h"
+
 #include <botan/bigint.h>
 #include <botan/base58.h>
 #include <botan/base64.h>
 #include <botan/sha2_32.h>
 #include <botan/hex.h>
 #include <botan/rmd160.h>
-
-#include <botan/botan.h>
 #include <botan/pubkey.h>
-#include <botan/ec_group.h>
 #include <botan/ecdsa.h>
-#include <botan/auto_rng.h>
-#include <botan/base64.h>
+#include <botan/botan.h>
+
+
 
 class nCripto {
 private:
@@ -34,9 +35,12 @@ private:
 
 
 public:
-	bool verifySignedString(std::string stringSigned, std::string publicKey);
+	bool verifySignedString(const std::string& message, const std::string signatureBase64, const std::string publicKey);
 	std::string getAddressFromPublicKey(std::string publicKey);
 	NosoC::KeyPair generateECKeysPair();
+	std::string signMessage(const std::string& message,
+		const std::string& privateKey);
+
 };
 
 #endif // MCRIPTO_H

@@ -10,6 +10,7 @@ namespace NosoC {
 	public:
 		std::string PublicKey;
 		std::string PrivateKey;
+
 	};
 
 	enum class KeyType {
