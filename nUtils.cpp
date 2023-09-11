@@ -30,7 +30,6 @@ NosoC::KeyPair NosoCppUtils::StringTokenizer(std::string keys)
 
 }
 
-
 /*
 * Checks the key sizes in a pair
 * Returns true if the dimensions match the expected values
