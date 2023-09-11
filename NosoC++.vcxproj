@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build"
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -71,11 +72,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\pasic\source\repos\NosoC++\NosoC++\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;C:\Users\pasic\source\repos\NosoC++\NosoC++\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\pasic\source\repos\NosoC++\NosoC++\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\pasic\source\repos\NosoC++\NosoC++\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;C:\Users\pasic\source\repos\NosoC++\NosoC++\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\pasic\source\repos\NosoC++\NosoC++\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -118,7 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;NOSOC_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\pasic\source\repos\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
@@ -140,6 +141,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,24 +153,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="nCore.h" />
-    <ClInclude Include="nCripto.h" />
-    <ClInclude Include="NosoCpp.h" />
-    <ClInclude Include="nUtils.h" />
-    <ClInclude Include="WalletObject.h" />
+    <ClInclude Include="include/Constants.h" />
+    <ClInclude Include="include/nCore.h" />
+    <ClInclude Include="include/nCripto.h" />
+    <ClInclude Include="include/NosoCpp.h" />
+    <ClInclude Include="include/nUtils.h" />
+    <ClInclude Include="include/WalletObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="nCore.cpp" />
-    <ClCompile Include="nCripto.cpp" />
-    <ClCompile Include="NosoCpp.cpp">
+    <ClCompile Include="src/nCore.cpp" />
+    <ClCompile Include="src/nCripto.cpp" />
+    <ClCompile Include="src/NosoCpp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="nUtils.cpp" />
-    <ClCompile Include="Objects.h">
+    <ClCompile Include="src/nUtils.cpp" />
+    <ClCompile Include="include/Objects.h">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WalletObject.cpp">
+    <ClCompile Include="src/WalletObject.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
