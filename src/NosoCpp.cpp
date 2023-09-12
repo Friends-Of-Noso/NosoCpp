@@ -9,79 +9,79 @@
 #include "NosoCpp.h"
 nCripto cripto;
 WalletObject* NosoCpp::CreateNewAddress() {
-	NosoC::KeyPair KeysPair = cripto.generateECKeysPair();
+    NosoC::KeyPair KeysPair = cripto.generateECKeysPair();
 
-	WalletObject* walletObject = new WalletObject();
+    WalletObject* walletObject = new WalletObject();
 
-	walletObject->PublicKey = KeysPair.PublicKey;
-	walletObject->PrivateKey = KeysPair.PrivateKey;
-	walletObject->Hash = cripto.getAddressFromPublicKey(KeysPair.PublicKey);
+    walletObject->PublicKey = KeysPair.PublicKey;
+    walletObject->PrivateKey = KeysPair.PrivateKey;
+    walletObject->Hash = cripto.getAddressFromPublicKey(KeysPair.PublicKey);
 
-	std::cout << "  #Create Wallet Wallet Object:" << std::endl;
-	std::cout << "  #PublicKey: " << walletObject->PublicKey << std::endl;
-	std::cout << "  #PrivateKey: " << walletObject->PrivateKey << std::endl;
-	std::cout << "  #Hash: " << walletObject->Hash << std::endl;
-	return nullptr;
+    std::cout << "  #Create Wallet Wallet Object:" << std::endl;
+    std::cout << "  #PublicKey: " << walletObject->PublicKey << std::endl;
+    std::cout << "  #PrivateKey: " << walletObject->PrivateKey << std::endl;
+    std::cout << "  #Hash: " << walletObject->Hash << std::endl;
+    return nullptr;
 }
 
 std::string NosoCpp::signMessage(const std::string& message, const std::string& privateKey)
 {
-	try {
-		return  cripto.signMessage(message, privateKey);
-	}
+    try {
+        return  cripto.signMessage(message, privateKey);
+    }
 
-	catch (const std::exception& ex)
-	{
-		std::cerr << "Error: " << ex.what() << std::endl;
-		return nullptr;
-	}
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Error: " << ex.what() << std::endl;
+        return nullptr;
+    }
 }
 
 bool NosoCpp::verifySignatureMessage(const std::string& message, const std::string signatureBase64, const std::string publicKey)
 {
-	try {
-		return cripto.verifySignedString(message, signatureBase64, publicKey);
-	}
+    try {
+        return cripto.verifySignedString(message, signatureBase64, publicKey);
+    }
 
-	catch (const std::exception& ex)
-	{
-		std::cerr << "Error: " << ex.what() << std::endl;
-		return false;
-	}
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Error: " << ex.what() << std::endl;
+        return false;
+    }
 }
 
 
 WalletObject* NosoCpp::ImportAddressForKeys(const std::string& keys) {
 
-	NosoC::KeyPair keysPair = NosoCppUtils::StringTokenizer(keys);
-	std::string signature = cripto.signMessage(NosoC::StringSignature, keysPair.PrivateKey);
-	bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
+    NosoC::KeyPair keysPair = NosoCppUtils::StringTokenizer(keys);
+    std::string signature = cripto.signMessage(NosoC::StringSignature, keysPair.PrivateKey);
+    bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
 
 
 
-	if (!NosoCppUtils::checkSizesKeyPair(keysPair)) {
-		std::cout << "  #Error -> Invalid input keys, " << std::endl;
-		return nullptr;
-	}
+    if (!NosoCppUtils::checkSizesKeyPair(keysPair)) {
+        std::cout << "  #Error -> Invalid input keys, " << std::endl;
+        return nullptr;
+    }
 
 
 
-	if (verification) {
-		WalletObject* walletObject = new WalletObject();
-		walletObject->PublicKey = keysPair.PublicKey;
-		walletObject->PrivateKey = keysPair.PrivateKey;
-		walletObject->Hash = cripto.getAddressFromPublicKey(keysPair.PublicKey);
+    if (verification) {
+        WalletObject* walletObject = new WalletObject();
+        walletObject->PublicKey = keysPair.PublicKey;
+        walletObject->PrivateKey = keysPair.PrivateKey;
+        walletObject->Hash = cripto.getAddressFromPublicKey(keysPair.PublicKey);
 
-		std::cout << "  #Wallet Object:" << std::endl;
-		std::cout << "  #Hash: " << walletObject->Hash << std::endl;
-		std::cout << "  #Public Key: " << walletObject->PublicKey << std::endl;
-		std::cout << "  #Private Key: " << walletObject->PrivateKey << std::endl;
-		return walletObject;
-	}
-	else
-	{
-		std::cout << "  #Error -> Key verification error" << std::endl;
-	}
+        std::cout << "  #Wallet Object:" << std::endl;
+        std::cout << "  #Hash: " << walletObject->Hash << std::endl;
+        std::cout << "  #Public Key: " << walletObject->PublicKey << std::endl;
+        std::cout << "  #Private Key: " << walletObject->PrivateKey << std::endl;
+        return walletObject;
+    }
+    else
+    {
+        std::cout << "  #Error -> Key verification error" << std::endl;
+    }
 
-	return nullptr;
+    return nullptr;
 }

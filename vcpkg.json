@@ -1,0 +1,7 @@
+{
+  "name": "nosowalletcpp",
+  "version-string": "latest",
+  "dependencies": [
+    "botan"
+  ]
+}
