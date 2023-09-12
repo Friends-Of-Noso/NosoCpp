@@ -1,0 +1,151 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "ninja-multi-vcpkg",
+            "displayName": "Ninja Multi-Config",
+            "description": "Configure with vcpkg toolchain and generate Ninja project files for all configurations",
+            "binaryDir": "${sourceDir}/builds/${presetName}",
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": {
+                    "type": "FILEPATH",
+                    "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+                },
+                "CMAKE_INSTALL_PREFIX": "/usr",
+                "CMAKE_INSTALL_LIBDIR": "lib",
+                "CMAKE_INSTALL_INCLUDEDIR": "include",
+                "CMAKE_INSTALL_DOCDIR": "share/doc/libnosocpp",
+                "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": "YES",
+                "CPACK_PACKAGE_NAME": "libnosocpp",
+                "CPACK_PACKAGE_CONTACT": "PasichDev",
+                "CPACK_PACKAGE_VENDOR": "PasichDev",
+                "CPACK_RESOURCE_FILE_LICENSE": "${sourceDir}/LICENSE.txt",
+                "CPACK_RESOURCE_FILE_README": "${sourceDir}/README.md",
+                "CPACK_DEBIAN_PACKAGE_DEPENDS": "libbotan-2-19 (>= 2.19.3)",
+                "CPACK_RPM_PACKAGE_REQUIRES": "libbotan-2-19 >= 2.19.3",
+                "CPACK_RPM_PACKAGE_LICENSE": "MIT",
+                "CPACK_RPM_COMPRESSION_TYPE": "lzma"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "ninja-vcpkg-debug",
+            "configurePreset": "ninja-multi-vcpkg",
+            "displayName": "Build (Debug)",
+            "description": "Build with Ninja/vcpkg (Debug)",
+            "configuration": "Debug",
+            "cleanFirst": true
+        },
+        {
+            "name": "ninja-vcpkg-release",
+            "configurePreset": "ninja-multi-vcpkg",
+            "displayName": "Build (Release)",
+            "description": "Build with Ninja/vcpkg (Release)",
+            "configuration": "Release",
+            "cleanFirst": false
+        },
+        {
+            "name": "ninja-vcpkg",
+            "configurePreset": "ninja-multi-vcpkg",
+            "displayName": "Build",
+            "description": "Build with Ninja/vcpkg",
+            "cleanFirst": true
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "test-ninja-vcpkg",
+            "configurePreset": "ninja-multi-vcpkg",
+            "hidden": true
+        },
+        {
+            "name": "test-debug",
+            "description": "Test (Debug)",
+            "displayName": "Test (Debug)",
+            "configuration": "Debug",
+            "inherits": [
+                "test-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "test-release",
+            "description": "Test (Release)",
+            "displayName": "Test (Release)",
+            "configuration": "Release",
+            "inherits": [
+                "test-ninja-vcpkg"
+            ]
+        }
+    ],
+    "packagePresets":[
+        {
+            "name": "package-ninja-vcpkg",
+            "configurePreset": "ninja-multi-vcpkg",
+            "hidden": true
+        },
+        {
+            "name": "package-zip-release",
+            "description": "Package .zip (Release)",
+            "displayName": "Package .zip (Release)",
+            "generators": [
+                "ZIP"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "package-tar-gz-release",
+            "description": "Package tar.gz (Release)",
+            "displayName": "Package tar.gz (Release)",
+            "generators": [
+                "TGZ"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "package-deb-release",
+            "description": "Package .deb (Release)",
+            "displayName": "Package .deb (Release)",
+            "generators": [
+                "DEB"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "package-rpm-release",
+            "description": "Package .rpm (Release)",
+            "displayName": "Package .rpm (Release)",
+            "generators": [
+                "RPM"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "package-nsis64-release",
+            "description": "Package install.exe 64b (Release)",
+            "displayName": "Package install.exe 64b (Release)",
+            "environment": {
+            },
+            "generators": [
+                "NSIS64"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg"
+            ]
+        }
+    ]
+}
