@@ -89,9 +89,6 @@ jobs:
       - name: List the files
         run: ls -alF "${{ env.release }}"
 
-      - name: Checking file type
-        run: file "${{ env.release }}/${{ env.shared }}"
-
       - name: Packaging
         id: packages
         run: |
@@ -133,9 +130,9 @@ jobs:
 
       - name: List files
         run: |
-          ls -alF "${{ env.project-name }}-${{ env.win }}"
-          ls -alF "${{ env.project-name }}-${{ env.lin }}"
-          ls -alF "${{ env.project-name }}-${{ env.osx }}"
+          ls -alF "${{ env.project-name }}-${{ inputs.win }}"
+          ls -alF "${{ env.project-name }}-${{ inputs.lin }}"
+          ls -alF "${{ env.project-name }}-${{ inputs.osx }}"
 
       - name: Generate Release Notes
         id: git-cliff
@@ -152,10 +149,10 @@ jobs:
           name: ${{ env.project-name }} ${{ env.tag }}
           body: ${{ steps.git-cliff.outputs.content }}
           files: |
-            ${{ env.project-name }}-${{ env.win }}/*.zip
-            ${{ env.project-name }}-${{ env.lin }}/*.tar.gz
-            ${{ env.project-name }}-${{ env.lin }}/*.deb
-            ${{ env.project-name }}-${{ env.lin }}/*.rpm
-            ${{ env.project-name }}-${{ env.osx }}/*.tar.gz
+            ${{ env.project-name }}-${{ inputs.win }}/*.zip
+            ${{ env.project-name }}-${{ inputs.lin }}/*.tar.gz
+            ${{ env.project-name }}-${{ inputs.lin }}/*.deb
+            ${{ env.project-name }}-${{ inputs.lin }}/*.rpm
+            ${{ env.project-name }}-${{ inputs.osx }}/*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
