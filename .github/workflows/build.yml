@@ -108,7 +108,6 @@ jobs:
         with:
           name: ${{ env.project-name }}-${{ matrix.triplet }}
           path: ${{ env.ninja }}/lib${{ env.lib-name }}-*
-          retention-days: 2
 
   package-release:
     if: contains(github.ref, '/tags/')
