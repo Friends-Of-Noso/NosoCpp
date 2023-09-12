@@ -2,10 +2,10 @@
 
 GENERATE_PRESET=ninja-multi-vcpkg
 BUILD_PRESET=ninja-vcpkg-release
-#PACKAGE_PRESET_ZIP=package-zip-release
-#PACKAGE_PRESET_TGZ=package-tar-gz-release
+PACKAGE_PRESET_ZIP=package-zip-release
+PACKAGE_PRESET_TGZ=package-tar-gz-release
 PACKAGE_PRESET_DEB=package-deb-release
-#PACKAGE_PRESET_RPM=package-rpm-release
+PACKAGE_PRESET_RPM=package-rpm-release
 #PACKAGE_PRESET_NSIS64=package-nsis64-release
 BUILDS=builds/ninja-multi-vcpkg
 
@@ -37,23 +37,23 @@ then
   cmake --build --preset ${BUILD_PRESET}
 fi
 
-#if [ $? == 0 ]
-#then
-#  echo
-#  echo "#####"
-#  echo "# Packaging NosoCpp *.zip"
-#  echo "#####"
-#  cpack --preset ${PACKAGE_PRESET_ZIP}
-#fi
+if [ $? == 0 ]
+then
+  echo
+  echo "#####"
+  echo "# Packaging NosoCpp *.zip"
+  echo "#####"
+  cpack --preset ${PACKAGE_PRESET_ZIP}
+fi
 
-#if [ $? == 0 ]
-#then
-#  echo
-#  echo "#####"
-#  echo "# Packaging NosoCpp *.tar.gz"
-#  echo "#####"
-#  cpack --preset ${PACKAGE_PRESET_TGZ}
-#fi
+if [ $? == 0 ]
+then
+  echo
+  echo "#####"
+  echo "# Packaging NosoCpp *.tar.gz"
+  echo "#####"
+  cpack --preset ${PACKAGE_PRESET_TGZ}
+fi
 
 if [ $? == 0 ]
 then
@@ -64,20 +64,20 @@ then
   cpack --preset ${PACKAGE_PRESET_DEB}
 fi
 
-#if [ $? == 0 ]
-#then
-#  echo
-#  echo "#####"
-#  echo "# Packaging NosoCpp *.rpm"
-#  echo "#####"
-#  cpack --preset ${PACKAGE_PRESET_RPM}
-#fi
+if [ $? == 0 ]
+then
+  echo
+  echo "#####"
+  echo "# Packaging NosoCpp *.rpm"
+  echo "#####"
+  cpack --preset ${PACKAGE_PRESET_RPM}
+fi
 
-#if [ $? == 0 ]
-#then
-#  echo
-#  echo "#####"
-#  echo "# Packaging NosoCpp install.exe"
-#  echo "#####"
-#  cpack --preset ${PACKAGE_PRESET_NSIS64}
-#fi
+if [ $? == 0 ]
+then
+  echo
+  echo "#####"
+  echo "# Packaging NosoCpp install.exe"
+  echo "#####"
+  cpack --preset ${PACKAGE_PRESET_NSIS64}
+fi
