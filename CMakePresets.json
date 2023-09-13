@@ -2,8 +2,8 @@
     "version": 6,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 21,
-        "patch": 0
+        "minor": 25,
+        "patch": 1
     },
     "configurePresets": [
         {
@@ -17,12 +17,6 @@
                     "type": "FILEPATH",
                     "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
                 },
-                "CMAKE_INSTALL_PREFIX": "/usr",
-                "CMAKE_INSTALL_LIBDIR": "lib",
-                "CMAKE_INSTALL_INCLUDEDIR": "include",
-                "CMAKE_INSTALL_DOCDIR": "share/doc/libnosocpp",
-                "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": "YES",
-                "CPACK_PACKAGE_NAME": "libnosocpp",
                 "CPACK_PACKAGE_CONTACT": "PasichDev",
                 "CPACK_PACKAGE_VENDOR": "PasichDev",
                 "CPACK_RESOURCE_FILE_LICENSE": "${sourceDir}/LICENSE.txt",
@@ -32,16 +26,67 @@
                 "CPACK_RPM_PACKAGE_LICENSE": "MIT",
                 "CPACK_RPM_COMPRESSION_TYPE": "lzma"
             }
+        },
+        {
+            "name": "ninja-multi-vcpkg-shared",
+            "displayName": "Ninja Multi-Config Shared",
+            "description": "Configure with vcpkg toolchain and generate Ninja project files for shared configurations",
+            "cacheVariables": {
+                "NOSOCPP_MAKE_SHARED": "YES"
+            },
+            "inherits": [
+                "ninja-multi-vcpkg"
+            ]
+        },
+        {
+            "name": "ninja-multi-vcpkg-shared-windows",
+            "displayName": "Ninja Multi-Config Shared Windows",
+            "description": "Configure with vcpkg toolchain and generate Ninja project files for Windows shared configurations",
+            "cacheVariables": {
+                "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": "YES"
+            },
+            "inherits": [
+                "ninja-multi-vcpkg-shared"
+            ]
+        },
+        {
+            "name": "ninja-multi-vcpkg-static",
+            "displayName": "Ninja Multi-Config Static",
+            "description": "Configure with vcpkg toolchain and generate Ninja project files for static configurations",
+            "cacheVariables": {
+                "NOSOCPP_MAKE_STATIC": "YES"
+            },
+            "inherits": [
+                "ninja-multi-vcpkg"
+            ]
+        },
+        {
+            "name": "ninja-multi-vcpkg-static-windows",
+            "displayName": "Ninja Multi-Config Static Windows",
+            "description": "Configure with vcpkg toolchain and generate Ninja project files for Windows static configurations",
+            "cacheVariables": {
+                "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": "YES"
+            },
+            "inherits": [
+                "ninja-multi-vcpkg-static"
+            ]
         }
     ],
     "buildPresets": [
         {
-            "name": "ninja-vcpkg-debug",
+            "name": "build-ninja-vcpkg",
             "configurePreset": "ninja-multi-vcpkg",
+            "hidden": true,
+            "cleanFirst": true
+        },
+        {
+            "name": "ninja-vcpkg-debug",
             "displayName": "Build (Debug)",
             "description": "Build with Ninja/vcpkg (Debug)",
             "configuration": "Debug",
-            "cleanFirst": true
+            "inherits": [
+                "build-ninja-vcpkg"
+            ]
         },
         {
             "name": "ninja-vcpkg-release",
@@ -49,20 +94,47 @@
             "displayName": "Build (Release)",
             "description": "Build with Ninja/vcpkg (Release)",
             "configuration": "Release",
-            "cleanFirst": true
+            "inherits": [
+                "build-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "ninja-vcpkg-release-shared",
+            "configurePreset": "ninja-multi-vcpkg-shared",
+            "displayName": "Build Shared (Release)",
+            "description": "Build with Ninja/vcpkg Shared (Release)",
+            "inherits": [
+                "ninja-vcpkg-release"
+            ]
+        },
+        {
+            "name": "ninja-vcpkg-release-static",
+            "configurePreset": "ninja-multi-vcpkg-static",
+            "displayName": "Build Static (Release)",
+            "description": "Build with Ninja/vcpkg Static (Release)",
+            "inherits": [
+                "ninja-vcpkg-release"
+            ]
         },
         {
             "name": "ninja-vcpkg",
-            "configurePreset": "ninja-multi-vcpkg",
             "displayName": "Build",
             "description": "Build with Ninja/vcpkg",
-            "cleanFirst": true
+            "inherits": [
+                "build-ninja-vcpkg"
+            ]
         }
     ],
     "testPresets": [
         {
             "name": "test-ninja-vcpkg",
             "configurePreset": "ninja-multi-vcpkg",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "showOnly": "json-v1"
+            },
             "hidden": true
         },
         {
@@ -84,10 +156,30 @@
             ]
         }
     ],
-    "packagePresets":[
+    "packagePresets": [
         {
             "name": "package-ninja-vcpkg",
             "configurePreset": "ninja-multi-vcpkg",
+            "output": {
+                "debug": false,
+                "verbose": false
+            },
+            "hidden": true
+        },
+        {
+            "name": "package-ninja-vcpkg-shared",
+            "configurePreset": "ninja-multi-vcpkg-shared",
+            "inherits": [
+                "package-ninja-vcpkg"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "package-ninja-vcpkg-static",
+            "configurePreset": "ninja-multi-vcpkg-static",
+            "inherits": [
+                "package-ninja-vcpkg"
+            ],
             "hidden": true
         },
         {
@@ -102,6 +194,28 @@
             ]
         },
         {
+            "name": "package-zip-release-shared",
+            "description": "Package .zip Shared (Release)",
+            "displayName": "Package .zip Shared (Release)",
+            "generators": [
+                "ZIP"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-shared"
+            ]
+        },
+        {
+            "name": "package-zip-release-static",
+            "description": "Package .zip Static (Release)",
+            "displayName": "Package .zip Static (Release)",
+            "generators": [
+                "ZIP"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-static"
+            ]
+        },
+        {
             "name": "package-tar-gz-release",
             "description": "Package tar.gz (Release)",
             "displayName": "Package tar.gz (Release)",
@@ -110,6 +224,28 @@
             ],
             "inherits": [
                 "package-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "package-tar-gz-release-shared",
+            "description": "Package tar.gz Shared (Release)",
+            "displayName": "Package tar.gz Shared (Release)",
+            "generators": [
+                "TGZ"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-shared"
+            ]
+        },
+        {
+            "name": "package-tar-gz-release-static",
+            "description": "Package tar.gz Static (Release)",
+            "displayName": "Package tar.gz Static (Release)",
+            "generators": [
+                "TGZ"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-static"
             ]
         },
         {
@@ -124,6 +260,28 @@
             ]
         },
         {
+            "name": "package-deb-release-shared",
+            "description": "Package .deb Shared (Release)",
+            "displayName": "Package .deb Shared (Release)",
+            "generators": [
+                "DEB"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-shared"
+            ]
+        },
+        {
+            "name": "package-deb-release-static",
+            "description": "Package .deb Static (Release)",
+            "displayName": "Package .deb Static (Release)",
+            "generators": [
+                "DEB"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-static"
+            ]
+        },
+        {
             "name": "package-rpm-release",
             "description": "Package .rpm (Release)",
             "displayName": "Package .rpm (Release)",
@@ -135,16 +293,119 @@
             ]
         },
         {
+            "name": "package-rpm-release-shared",
+            "description": "Package .rpm Shared (Release)",
+            "displayName": "Package .rpm Shared (Release)",
+            "generators": [
+                "RPM"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-shared"
+            ]
+        },
+        {
+            "name": "package-rpm-release-static",
+            "description": "Package .rpm Static (Release)",
+            "displayName": "Package .rpm Static (Release)",
+            "generators": [
+                "RPM"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-static"
+            ]
+        },
+        {
             "name": "package-nsis64-release",
             "description": "Package install.exe 64b (Release)",
             "displayName": "Package install.exe 64b (Release)",
-            "environment": {
-            },
             "generators": [
                 "NSIS64"
             ],
             "inherits": [
                 "package-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "package-nsis64-release-shared",
+            "description": "Package install.exe 64b Shared (Release)",
+            "displayName": "Package install.exe 64b Shared (Release)",
+            "generators": [
+                "NSIS64"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-shared"
+            ]
+        },
+        {
+            "name": "package-nsis64-release-static",
+            "description": "Package install.exe 64b Static (Release)",
+            "displayName": "Package install.exe 64b Static (Release)",
+            "generators": [
+                "NSIS64"
+            ],
+            "inherits": [
+                "package-ninja-vcpkg-static"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "workflow-ninja-vcpkg",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "ninja-multi-vcpkg"
+                },
+                {
+                    "type": "build",
+                    "name": "ninja-vcpkg-release"
+                },
+                {
+                    "type": "package",
+                    "name": "package-tar-gz-release"
+                }
+            ]
+        },
+        {
+            "name": "workflow-ninja-vcpkg-linux",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "ninja-multi-vcpkg"
+                },
+                {
+                    "type": "build",
+                    "name": "ninja-vcpkg-release"
+                },
+                {
+                    "type": "package",
+                    "name": "package-tar-gz-release"
+                },
+                {
+                    "type": "package",
+                    "name": "package-deb-release"
+                },
+                {
+                    "type": "package",
+                    "name": "package-rpm-release"
+                }
+            ]
+        },
+        {
+            "name": "workflow-ninja-vcpkg-windows",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "ninja-multi-vcpkg"
+                },
+                {
+                    "type": "build",
+                    "name": "ninja-vcpkg-release"
+                },
+                {
+                    "type": "package",
+                    "name": "package-zip-release"
+                }
             ]
         }
     ]

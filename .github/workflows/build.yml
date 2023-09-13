@@ -28,13 +28,17 @@ env:
   project-name: NosoCpp
   lib-name: nosocpp
   cliff-cfg: cliff.toml
-  ninja: ${{ github.workspace }}/builds/ninja-multi-vcpkg
-  release: ${{ github.workspace }}/builds/ninja-multi-vcpkg/Release
-  debug: ${{ github.workspace }}/builds/ninja-multi-vcpkg/Debug
+  ninja: ninja-multi-vcpkg
+  ninja-shared: ${{ github.workspace }}/builds/ninja-multi-vcpkg-shared
+  release-shared: ${{ github.workspace }}/builds/ninja-multi-vcpkg-shared/Release
+  debug-shared: ${{ github.workspace }}/builds/ninja-multi-vcpkg-shared/Debug
+  ninja-static: ${{ github.workspace }}/builds/ninja-multi-vcpkg-static
+  release-static: ${{ github.workspace }}/builds/ninja-multi-vcpkg-static/Release
+  debug-static: ${{ github.workspace }}/builds/ninja-multi-vcpkg-static/Debug
 
 jobs:
 
-  build-matrix:
+  build:
     name: ${{ github.workflow }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
@@ -67,7 +71,7 @@ jobs:
           "automake"
 
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -79,45 +83,83 @@ jobs:
         with:
           vcpkgJsonGlob: 'vcpkg.json'
 
-      - name: Run CMake+vcpkg+Ninja to build packages and generate/build the code.
+      - name: (Shared) Run CMake+vcpkg+Ninja to build packages and generate/build the code.
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: ninja-multi-vcpkg
-          buildPreset: ninja-vcpkg-release
+          configurePreset: ninja-multi-vcpkg-shared
+          buildPreset: ninja-vcpkg-release-shared
 
-      - name: List the files
-        run: ls -alF "${{ env.release }}"
+      - name: (Shared) List the files
+        run: |
+          ls -alF "${{ env.ninja-shared }}"
+          ls -alF "${{ env.release-shared }}"
 
-      - name: Packaging
-        id: packages
+      - name: (Shared) Packaging
         run: |
           if [ ${{ matrix.os }} == 'windows-latest' ]; then
-            cpack --preset package-zip-release
+            cpack --preset package-zip-release-shared
           elif [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
-            cpack --preset package-tar-gz-release
-            cpack --preset package-deb-release
-            cpack --preset package-rpm-release
+            cpack --preset package-tar-gz-release-shared
+            cpack --preset package-deb-release-shared
+            cpack --preset package-rpm-release-shared
           elif [ ${{ matrix.os }} == 'macos-latest' ]; then
-            cpack --preset package-tar-gz-release
-            echo "archives=[ '${{ env.release }}/*.tar.gz' ]" >> "$GITHUB_ENV"
+            cpack --preset package-tar-gz-release-shared
           fi
+
+      - name: (Static) Run CMake+vcpkg+Ninja to build packages and generate/build the code.
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ninja-multi-vcpkg-static
+          buildPreset: ninja-vcpkg-release-static
+
+      - name: (Static) List the files
+        run: |
+          ls -alF "${{ env.ninja-static }}"
+          ls -alF "${{ env.release-static }}"
+
+      - name: (Static) Packaging
+        run: |
+          if [ ${{ matrix.os }} == 'windows-latest' ]; then
+            cpack --preset package-zip-release-static
+          elif [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
+            cpack --preset package-tar-gz-release-static
+            cpack --preset package-deb-release-static
+            cpack --preset package-rpm-release-static
+          elif [ ${{ matrix.os }} == 'macos-latest' ]; then
+            cpack --preset package-tar-gz-release-static
+          fi
+
+      - name: Generate lib prefix
+        run: |
+          (
+            if [ ${{ matrix.os }} == "ubuntu-latest" ] ||  [ ${{ matrix.os }} == "macos-latest" ]
+            then
+              echo "lib-prefix=lib"
+            else
+              echo "lib-prefix="
+            fi
+          ) >> "$GITHUB_ENV"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.project-name }}-${{ matrix.triplet }}
-          path: ${{ env.ninja }}/lib${{ env.lib-name }}-*
+          path: |
+            ${{ env.ninja-shared }}/${{ env.lib-prefix }}${{ env.lib-name }}-*
+            ${{ env.ninja-static }}/${{ env.lib-prefix }}${{ env.lib-name }}-*
 
   package-release:
     if: contains(github.ref, '/tags/')
 
     name: Package and create GitHub Release
     runs-on: ubuntu-latest
-    needs: build-matrix
+    needs: build
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set output
         id: vars
@@ -137,7 +179,7 @@ jobs:
         uses: orhun/git-cliff-action@v2
         with:
           config: ${{ env.cliff-cfg }}
-          args: --latest  --strip header
+          args: --latest --strip header
         env:
           OUTPUT: CHANGES.md
 
@@ -147,10 +189,15 @@ jobs:
           name: ${{ env.project-name }} ${{ env.tag }}
           body: ${{ steps.git-cliff.outputs.content }}
           files: |
-            ${{ env.project-name }}-${{ inputs.win }}/*.zip
-            ${{ env.project-name }}-${{ inputs.lin }}/*.tar.gz
-            ${{ env.project-name }}-${{ inputs.lin }}/*.deb
-            ${{ env.project-name }}-${{ inputs.lin }}/*.rpm
-            ${{ env.project-name }}-${{ inputs.osx }}/*.tar.gz
+            ${{ env.project-name }}-${{ inputs.win }}/${{ env.ninja }}-shared/*.zip
+            ${{ env.project-name }}-${{ inputs.win }}/${{ env.ninja }}-static/*.zip
+            ${{ env.project-name }}-${{ inputs.lin }}/${{ env.ninja }}-shared/*.tar.gz
+            ${{ env.project-name }}-${{ inputs.lin }}/${{ env.ninja }}-static/*.tar.gz
+            ${{ env.project-name }}-${{ inputs.lin }}/${{ env.ninja }}-shared/*.deb
+            ${{ env.project-name }}-${{ inputs.lin }}/${{ env.ninja }}-static/*.deb
+            ${{ env.project-name }}-${{ inputs.lin }}/${{ env.ninja }}-shared/*.rpm
+            ${{ env.project-name }}-${{ inputs.lin }}/${{ env.ninja }}-static/*.rpm
+            ${{ env.project-name }}-${{ inputs.osx }}/${{ env.ninja }}-shared/*.tar.gz
+            ${{ env.project-name }}-${{ inputs.osx }}/${{ env.ninja }}-static/*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
