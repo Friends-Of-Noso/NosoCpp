@@ -57,8 +57,7 @@ jobs:
         run: |
           sudo apt update && \
           sudo apt install -y \
-          "autoconf-archive" \
-          "libbotan-2-dev"
+          "autoconf-archive"
 
       - name: Install some needed packages on macOS
         if: ${{ matrix.os == 'macos-latest' }}
