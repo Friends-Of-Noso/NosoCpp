@@ -49,7 +49,7 @@
             "displayName": "Build (Release)",
             "description": "Build with Ninja/vcpkg (Release)",
             "configuration": "Release",
-            "cleanFirst": false
+            "cleanFirst": true
         },
         {
             "name": "ninja-vcpkg",
