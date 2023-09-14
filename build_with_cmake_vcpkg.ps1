@@ -9,6 +9,16 @@ $PACKAGE_PRESET_ZIP    = "package-zip-release"
 #$PACKAGE_PRESET_RPM    = "package-rpm-release"
 $PACKAGE_PRESET_NSIS64 = "package-nsis64-release"
 
+$WORKFLOW_PRESET       ="workflow-ninja-vcpkg-windows"
+
+
+if ( $WORKFLOW_PRESET ) {
+  echo "#####"
+  echo "# Calling CMake workflow: $WORKFLOW_PRESET"
+  echo "#####"
+  cmake --workflow --preset "$WORKFLOW_PRESET"
+  exit
+}
 
 if ( $GENERATE_PRESET ) {
   echo "#####"
@@ -44,7 +54,7 @@ if ( !$? ) {
   echo "#####"
   echo "# Packaging NosoCpp *.tar.gz"
   echo "#####"
-  cpack --preset ${PACKAGE_PRESET_TGZ}
+  cpack --preset $PACKAGE_PRESET_TGZ
 }
 
 if ( !$? ) {
@@ -54,7 +64,7 @@ if ( !$? ) {
   echo "#####"
   echo "# Packaging NosoCpp *.deb"
   echo "#####"
-  cpack --preset ${PACKAGE_PRESET_DEB}
+  cpack --preset $PACKAGE_PRESET_DEB
 }
 
 if ( !$? ) {
@@ -64,7 +74,7 @@ if ( !$? ) {
   echo "#####"
   echo "# Packaging NosoCpp *.rpm"
   echo "#####"
-  cpack --preset ${PACKAGE_PRESET_RPM}
+  cpack --preset $PACKAGE_PRESET_RPM
 }
 
 if ( !$? ) {
@@ -74,5 +84,5 @@ if ( !$? ) {
   echo "#####"
   echo "# Packaging NosoCpp install.exe"
   echo "#####"
-  cpack --preset ${PACKAGE_PRESET_NSIS64}
+  cpack --preset $PACKAGE_PRESET_NSIS64
 }

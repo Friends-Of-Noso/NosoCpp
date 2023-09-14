@@ -7,12 +7,12 @@ C++ Compiler (e.g., g++, Visual Studio)
 
 # Usage
 ### Include the necessary headers in your C++ code:
-```
+```cpp
 #include <NosoCpp.h>
 NosoCpp noso;
 ```
 Use the provided functions to perform cryptographic operations:
-```
+```cpp
 // Example: Get the WalletObject from the ready keys
 WalletObject* wallet = noso.ImportWalletForKeys(walletToken);
 
