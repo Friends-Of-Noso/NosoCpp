@@ -12,12 +12,11 @@ WalletObject* NosoCpp::CreateNewAddress() {
 	try {
 		NosoC::KeyPair KeysPair = cripto.generateECKeysPair();
 
-		WalletObject* walletObject = new WalletObject();
+		Wallet<std::string> walletString;
 
-		walletObject->PublicKey = KeysPair.PublicKey;
-		walletObject->PrivateKey = KeysPair.PrivateKey;
-		walletObject->Hash = cripto.getAddressFromPublicKey(KeysPair.PublicKey);
-		return walletObject;
+		std::string hash = cripto.getAddressFromPublicKey(KeysPair.PublicKey);
+
+		return walletString.CreateNewWalletObject(hash, KeysPair.PublicKey, KeysPair.PrivateKey);
 	}
 
 	catch (const std::exception& ex)
@@ -62,25 +61,17 @@ WalletObject* NosoCpp::ImportAddressForKeys(const std::string& keys) {
 	bool verification = cripto.verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
 
 
-
 	if (!NosoCppUtils::checkSizesKeyPair(keysPair)) {
 		std::cout << "  #Error -> Invalid input keys, " << std::endl;
 		return nullptr;
 	}
 
 
-
 	if (verification) {
-		WalletObject* walletObject = new WalletObject();
-		walletObject->PublicKey = keysPair.PublicKey;
-		walletObject->PrivateKey = keysPair.PrivateKey;
-		walletObject->Hash = cripto.getAddressFromPublicKey(keysPair.PublicKey);
+		Wallet<std::string> walletString;
+		std::string hash = cripto.getAddressFromPublicKey(keysPair.PublicKey);
+		return walletString.CreateNewWalletObject(hash, keysPair.PublicKey, keysPair.PrivateKey);
 
-		std::cout << "  #Wallet Object:" << std::endl;
-		std::cout << "  #Hash: " << walletObject->Hash << std::endl;
-		std::cout << "  #Public Key: " << walletObject->PublicKey << std::endl;
-		std::cout << "  #Private Key: " << walletObject->PrivateKey << std::endl;
-		return walletObject;
 	}
 	else
 	{
