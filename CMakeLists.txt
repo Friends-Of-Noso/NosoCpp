@@ -9,13 +9,17 @@ project(
   HOMEPAGE_URL "https://github.com/pasichDev/NosoCpp"
 )
 
+
+## Tests
+enable_testing()
+## Tests
+add_subdirectory(tests)
 # Source Files
 set(NOSO_SOURCE_FILES
     src/nCore.cpp
     src/nCripto.cpp
     src/NosoCpp.cpp
     src/nUtils.cpp
-    src/WalletObject.cpp
 )
 
 # Header Files

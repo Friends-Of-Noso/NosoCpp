@@ -9,6 +9,7 @@
 #include "NosoCpp.h"
 nCripto cripto;
 WalletObject* NosoCpp::CreateNewAddress() {
+	
 	try {
 		NosoC::KeyPair KeysPair = cripto.generateECKeysPair();
 

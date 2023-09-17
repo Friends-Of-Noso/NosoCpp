@@ -132,8 +132,13 @@
             "output": {
                 "outputOnFailure": true
             },
-            "execution": {
-                "showOnly": "json-v1"
+            "hidden": true
+        },
+        {
+            "name": "test-ninja-vcpkg-shared",
+            "configurePreset": "ninja-multi-vcpkg-shared",
+            "output": {
+                "outputOnFailure": true
             },
             "hidden": true
         },
@@ -153,6 +158,15 @@
             "configuration": "Release",
             "inherits": [
                 "test-ninja-vcpkg"
+            ]
+        },
+        {
+            "name": "test-release-shared",
+            "description": "Test (Release)",
+            "displayName": "Test (Release)",
+            "configuration": "Release",
+            "inherits": [
+                "test-ninja-vcpkg-shared"
             ]
         }
     ],

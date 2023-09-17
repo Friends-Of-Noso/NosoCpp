@@ -3,6 +3,7 @@
 LINK_OPTION="-shared"
 GENERATE_PRESET="ninja-multi-vcpkg${LINK_OPTION}"
 BUILD_PRESET="ninja-vcpkg-release${LINK_OPTION}"
+TEST_PRESET="test-release-shared"
 PACKAGE_PRESET_ZIP="package-zip-release${LINK_OPTION}"
 PACKAGE_PRESET_TGZ="package-tar-gz-release${LINK_OPTION}"
 PACKAGE_PRESET_DEB="package-deb-release${LINK_OPTION}"
@@ -52,6 +53,21 @@ then
   echo "#####"
   cmake --build --preset ${BUILD_PRESET}
 fi
+
+
+## CTest
+if [ $? != "0" ]
+then
+  exit
+elif [ "${TEST_PRESET}" != "" ]
+then
+  echo
+  echo "#####"
+  echo "# Testing NosoCpp"
+  echo "#####"
+  ctest --preset ${TEST_PRESET}
+fi
+
 
 if [ $? != "0" ]
 then
