@@ -17,7 +17,6 @@
 #include "Constants.h"
 #include <botan/bigint.h>
 
-
 class nCore {
 
 public:
