@@ -14,21 +14,24 @@ project(
 enable_testing()
 ## Tests
 add_subdirectory(tests)
+
+
 # Source Files
 set(NOSO_SOURCE_FILES
-    src/nCore.cpp
-    src/nCripto.cpp
-    src/NosoCpp.cpp
-    src/nUtils.cpp
+    src/NosoAddress.cpp
+    src/NosoCore.cpp
+    src/NosoUtils.cpp
+    src/VerifySing.cpp
 )
 
 # Header Files
 set(NOSO_INSTALL_HEADER_FILES
   include/Constants.h
-  include/nCore.h
-  include/nCripto.h
-  include/nUtils.h
+  include/NosoAddress.h
+  include/NosoCore.h
+  include/NosoUtils.h
   include/Objects.h
+  include/VerifySing.h
   include/WalletObject.h
 )
 

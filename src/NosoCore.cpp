@@ -6,10 +6,10 @@
  *
  * See LICENSE file for details.
  */
-#include "nCore.h"
-std::string nCore::BMHexto58(const std::string& numerohex, const Botan::BigInt& alphabetnumber) {
+#include "NosoCore.h"
+std::string NosoCppCore::BMHexto58(const std::string& numerohex, const BigInt& alphabetnumber) {
 
-    Botan::BigInt decimalValue = HexToDec(numerohex);
+    BigInt decimalValue = HexToDec(numerohex);
     std::string Result = "";
     std::string AlphabetUsed;
 
@@ -42,17 +42,17 @@ std::string nCore::BMHexto58(const std::string& numerohex, const Botan::BigInt& 
     return Result;
 }
 
-Botan::BigInt nCore::HexToDec(std::string numerohex) {
+BigInt NosoCppCore::HexToDec(std::string numerohex) {
     std::vector<uint8_t> bytes;
     for (size_t i = 0; i < numerohex.size(); i += 2) {
         std::string byteString = numerohex.substr(i, 2);
         uint8_t byte = static_cast<uint8_t>(std::stoi(byteString, nullptr, 16));
         bytes.push_back(byte);
     }
-    return Botan::BigInt(bytes.data(), bytes.size());
+    return BigInt(bytes.data(), bytes.size());
 }
 
-NosoC::DivResult nCore::DivideBigInt(const Botan::BigInt& numerator, const Botan::BigInt& denominator)
+NosoC::DivResult NosoCppCore::DivideBigInt(const BigInt& numerator, const BigInt& denominator)
 {
     NosoC::DivResult result;
     result.Quotient = numerator / denominator;
@@ -61,8 +61,8 @@ NosoC::DivResult nCore::DivideBigInt(const Botan::BigInt& numerator, const Botan
 }
 
 
-std::string nCore::DecTo58(const std::string& number) {
-    Botan::BigInt decimalValue = Botan::BigInt(number);
+std::string NosoCppCore::DecTo58(const std::string& number) {
+    BigInt decimalValue = BigInt(number);
     NosoC::DivResult resultDiv;
     std::string remainder;
     std::string result = "";
@@ -89,7 +89,7 @@ std::string nCore::DecTo58(const std::string& number) {
 }
 
 
-int nCore::B58Sum(const std::string& number58) {
+int NosoCppCore::B58Sum(const std::string& number58) {
     int total = 0;
 
     for (size_t i = 0; i < number58.length(); i++) {
@@ -106,7 +106,7 @@ int nCore::B58Sum(const std::string& number58) {
 
 
 
-std::vector<unsigned char> nCore::nosoBase64Decode(const std::string& input) {
+std::vector<unsigned char> NosoCppCore::nosoBase64Decode(const std::string& input) {
 
     std::vector<int> indexList;
     for (char c : input) {
@@ -133,4 +133,36 @@ std::vector<unsigned char> nCore::nosoBase64Decode(const std::string& input) {
     }
 
     return tempByteArray;
+}
+
+string NosoCppCore::getHashSha256ToString(const string &publicKey)
+{
+	SHA_256 sha256;
+	sha256.update(reinterpret_cast<const Botan::byte *>(publicKey.c_str()), publicKey.length());
+	secure_vector<Botan::byte> digest = sha256.final();
+
+	string result = hex_encode(digest);
+
+	for (char &c : result)
+	{
+		if (c == '-')
+			c = ' ';
+		c = std::toupper(c);
+	}
+
+	return result;
+}
+
+string NosoCppCore::getHashMD160ToString(const string &pubSHAHashed)
+{
+	RIPEMD_160 hash;
+	secure_vector<uint8_t> hashResult = hash.process(reinterpret_cast<const uint8_t *>(pubSHAHashed.data()), pubSHAHashed.size());
+	string hashHex = hex_encode(hashResult);
+
+	for (char &c : hashHex)
+	{
+		c = std::toupper(c);
+	}
+
+	return hashHex;
 }

@@ -6,7 +6,7 @@
  *
  * See LICENSE file for details.
  */
-#include "nUtils.h"
+#include "NosoUtils.h"
 
 NosoC::KeyPair NosoCppUtils::StringTokenizer(std::string keys)
 {

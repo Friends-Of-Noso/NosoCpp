@@ -16,8 +16,10 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 namespace NosoCppUtils {
-	NosoC::KeyPair StringTokenizer(std::string keys);
+	NosoC::KeyPair StringTokenizer(string keys);
 
 	bool checkSizesKeyPair(NosoC::KeyPair keys);
 }
