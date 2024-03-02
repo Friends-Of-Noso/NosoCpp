@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This code is licensed under the terms of the MIT License.
  *
  * Author: pasichDev
@@ -8,24 +8,32 @@
  */
 #include "VerifySing.h"
 
+///Тут помилка ключ не повинен бути фіксований..
 string NosoCpp::signMessage(const string &message, const string &privateKey)
 {
 	try
 	{
 		Botan::AutoSeeded_RNG rng;
 		std::vector<unsigned char> messages = NosoCppCore::nosoBase64Decode("VERIFICATION");
-		Botan::secure_vector<uint8_t> decodedPrivatKey = Botan::base64_decode(privateKey);
+		Botan::secure_vector<uint8_t> decodedPrivatKey = Botan::base64_decode("OTN53RMkWSJ180blviSnSvJG3o/IqEoleuB9ijicWKs=");
+
 		Botan::AlgorithmIdentifier alg_id("ECDSA", Botan::AlgorithmIdentifier::USE_NULL_PARAM);
 
 		Botan::BigInt private_key_value = Botan::BigInt::decode(decodedPrivatKey.data(), decodedPrivatKey.size());
+
 		Botan::EC_Group secp256k1("secp256k1");
 		Botan::ECDSA_PrivateKey private_key(rng, secp256k1, private_key_value);
 		Botan::PK_Signer signer(private_key, rng, NosoC::emsa, Botan::DER_SEQUENCE);
 		signer.update(messages);
 		std::vector<uint8_t> signature = signer.signature(rng);
-
 		std::string signature_base64 = Botan::base64_encode(signature.data(), signature.size());
 
+		for (const auto& byte : signature) {
+			// Вивести кожен байт у шістнадцятковому форматі (0x)
+			std::cout << std::hex << static_cast<int>(byte) << "";
+		}
+
+		std::cout << std::endl;
 		return signature_base64;
 	}
 

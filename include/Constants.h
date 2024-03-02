@@ -17,7 +17,7 @@ namespace NosoC {
 	const std::string B64Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	const std::string CoinChar = "N";
 	const std::string StringSignature = "VERIFICATION";
-	const std::string emsa = "EMSA1(SHA-256)";
+	const std::string emsa = "EMSA1(SHA-1)";
 
 }
 

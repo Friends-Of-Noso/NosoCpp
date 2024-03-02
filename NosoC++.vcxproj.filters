@@ -18,16 +18,19 @@
     <ClInclude Include="include/Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include/nCore.h">
+    <ClInclude Include="include/NosoCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include/nCripto.h">
+    <ClInclude Include="include/NosoAddress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include/NosoCpp.h">
+    <ClInclude Include="include/NosoUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include/nUtils.h">
+    <ClInclude Include="include/Objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include/VerifySing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include/WalletObject.h">
@@ -35,20 +38,20 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src/nCore.cpp">
+    <ClCompile Include="src/NosoAddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/nCripto.cpp">
+    <ClCompile Include="src/NosoCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/NosoCpp.cpp">
+    <ClCompile Include="src/NosoUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/nUtils.cpp">
+    <ClCompile Include="src/VerifySing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include/Objects.h">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

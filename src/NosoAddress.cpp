@@ -7,6 +7,7 @@
  * See LICENSE file for details.
  */
 #include "NosoAddress.h"
+#include <print>
 
 /*
  */
@@ -36,6 +37,10 @@ NosoC::KeyPair NosoCpp::generateNewKeysPair()
 	result.PublicKey = publicKeyPointBase64;
 	result.PrivateKey = privateKeyBase64;
 
+	std::string signature = NosoCpp::signMessage(NosoC::StringSignature, privateKeyBase64);
+
+	std::cout << signature << endl;
+
 	return result;
 }
 
@@ -45,11 +50,16 @@ WalletObject* NosoCpp::restoreAddressFromKeysPair(const string &keys)
 {
 	NosoC::KeyPair keysPair = NosoCppUtils::StringTokenizer(keys);
 	std::string signature = NosoCpp::signMessage(NosoC::StringSignature, keysPair.PrivateKey);
+
+	std::cout << signature << endl;
+	std::cerr << "Signature: "  << std::endl;
+
 	bool verification = NosoCpp::verifySignedString(NosoC::StringSignature, signature, keysPair.PublicKey);
 
 	if (!NosoCppUtils::checkSizesKeyPair(keysPair))
 	{
 		std::cout << "  #Error -> Invalid input keys, " << endl;
+
 		return nullptr;
 	}
 
@@ -71,6 +81,7 @@ WalletObject* NosoCpp::generateNewAddress()
 	{
 		NosoC::KeyPair keysPair = NosoCpp::generateNewKeysPair();
 		Wallet<string> walletString;
+		
 		return walletString.CreateNewWalletObject(NosoCpp::restoreHashFromPublicKey(keysPair.PublicKey), keysPair.PublicKey, keysPair.PrivateKey);
 	}
 

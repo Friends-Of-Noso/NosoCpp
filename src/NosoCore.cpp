@@ -7,6 +7,7 @@
  * See LICENSE file for details.
  */
 #include "NosoCore.h"
+using namespace Botan;
 std::string NosoCppCore::BMHexto58(const std::string& numerohex, const BigInt& alphabetnumber) {
 
     BigInt decimalValue = HexToDec(numerohex);
